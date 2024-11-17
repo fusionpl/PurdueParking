@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart'; // Import for calendar
+import 'package:map_launcher/map_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const PurdueParkingApp());
@@ -265,7 +267,7 @@ class _EventParkingPageState extends State<EventParkingPage> {
       appBar: AppBar(
         title: const Text("Special Event Parking"),
       ),
-      backgroundColor: Color.fromRGBO(207,185,145,1.000),
+      backgroundColor: const Color.fromRGBO(207,185,145,1.000),
       body: Column(
         children: [
           TableCalendar(
@@ -345,50 +347,70 @@ class FindParkingPage extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16.0),
-            ParkingLocationCard(location: 'Lot A - North Russell St', availability: 'Available'),
-            ParkingLocationCard(location: 'Lot B - Discovery', availability: 'According to Analytics - Peak Hours'),
-            ParkingLocationCard(location: 'Garage C - McCutcheon', availability: 'Available'),
-            ParkingLocationCard(location: 'Garage D - Northwestern', availability: 'Limited Spots'),
-            // Add more locations as needed
+            ParkingLocationCard(
+              location: 'Lot A - North Russell St',
+              availability: 'Available',
+              latitude: 40.428492434603484,
+              longitude: -86.91883460225058,
+            ),
+            ParkingLocationCard(
+              location: 'Lot B - Discovery',
+              availability: 'According to Analytics - Peak Hours',
+              latitude: 40.419446279810856,
+              longitude: -86.92328961131224,
+            ),
           ],
         ),
       ),
     );
   }
 }
+
 class ParkingLocationCard extends StatelessWidget {
   final String location;
   final String availability;
+  final double latitude;
+  final double longitude;
 
   const ParkingLocationCard({
     super.key,
     required this.location,
     required this.availability,
+    required this.latitude,
+    required this.longitude,
   });
+
+  // Function to open Google Maps with coordinates
+  void _launchGoogleMaps(double latitude, double longitude) async {
+    final googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
+    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+      await launchUrl(Uri.parse(googleMapsUrl));
+    } else {
+      throw "Could not launch $googleMapsUrl";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0), // Space between cards
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
         title: Text(
           location,
-          style: const TextStyle(fontSize: 20.0), // Location text
+          style: const TextStyle(fontSize: 20.0),
         ),
         subtitle: Text(
           availability,
           style: TextStyle(color: availability == 'Available' ? Colors.green : Colors.red),
         ),
-        trailing: const Icon(Icons.directions, color: Colors.blue), // Directions icon
+        trailing: const Icon(Icons.directions, color: Colors.blue),
         onTap: () {
-          // Action for finding directions to the parking location
-          // For example, you could navigate to a map view or show directions
+          _launchGoogleMaps(latitude, longitude);
         },
       ),
     );
   }
 }
-
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
