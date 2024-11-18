@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart'; // Import for calendar
 import 'package:map_launcher/map_launcher.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const PurdueParkingApp());
@@ -99,123 +99,139 @@ class PurdueParkingScreen extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildRecentItem(context, "Parking Rules", 'icon.png' ),
-          _buildRecentItem(context, "Event Parking", 'icon.png'),
-          _buildRecentItem(context, "Find Parking", 'icon.png'),
+          _buildRecentItem(context, "Parking Rules", 'assets/rules.png' ),
+          _buildRecentItem(context, "Event Parking", 'assets/calendar.png'),
+          _buildRecentItem(context, "Find Parking", 'assets/parking-sign.png'),
         ],
       ),
     );
   }
 
   Widget _buildRecentItem(BuildContext context, String title, String imagePath) {
-    return GestureDetector(
-      onTap: () {
-        if (title == "Parking Rules") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  const ParkingRulesPage()),
-          );
-        } else if (title == "Event Parking") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  const EventParkingPage()),
-          );
-        } else if (title == "Find Parking") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  const FindParkingPage()),
-          );
-        }
-      },
-      child: Container(
-        width: 100,
-        margin: const EdgeInsets.only(right: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(imagePath, width: 40, height: 40,),
-              const SizedBox(height: 10),
-              Text(
-                title,
-                style: const TextStyle(fontSize: 12),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
+  return GestureDetector(
+    onTap: () {
+      if (title == "Parking Rules") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ParkingRulesPage()),
+        );
+      } else if (title == "Event Parking") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EventParkingPage()),
+        );
+      } else if (title == "Find Parking") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const FindParkingPage()),
+        );
+      }
+    },
+    child: Container(
+      width: 100,
+      margin: const EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(10),
       ),
-    );
-  }
-
-  Widget _buildFeaturesList(BuildContext context) {
-    return Column(
-      children: [
-        _buildFeatureItem(context, "Parking Rules", "Learn about Purdue Parking Rules"),
-        _buildFeatureItem(context, "Special Event Parking", "Check out today’s calendar for any special restrictions"),
-        _buildFeatureItem(context, "Find Parking", "Check analytics to see lot availability scores"),
-      ],
-    );
-  }
-
-  Widget _buildFeatureItem(BuildContext context, String title, String subtitle) {
-    return GestureDetector(
-      onTap: () {
-        if (title == "Parking Rules") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ParkingRulesPage()),
-          );
-        } else if (title == "Special Event Parking") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  const EventParkingPage()),
-          );
-        }
-        else if (title == "Find Parking") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  const FindParkingPage()),
-          );
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.image, size: 40, color: Colors.grey),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    subtitle,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                  ),
-                ],
-              ),
+            Image.asset(imagePath, width: 40, height: 40),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
             ),
-            Icon(Icons.arrow_forward, color: Colors.grey[600]),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
+  Widget _buildFeaturesList(BuildContext context) {
+  return Column(
+    children: [
+      _buildFeatureItem(
+        context,
+        "Parking Rules",
+        "Learn about Purdue Parking Rules",
+        'assets/parking_rules.jpeg',
+      ),
+      _buildFeatureItem(
+        context,
+        "Special Event Parking",
+        "Check out today’s calendar for any special restrictions",
+        'assets/special.jpeg',
+      ),
+      _buildFeatureItem(
+        context,
+        "Find Parking",
+        "Check analytics to see lot availability scores",
+        'assets/find_parking.jpeg',
+      ),
+    ],
+  );
+}
+
+  Widget _buildFeatureItem(
+    BuildContext context, String title, String subtitle, String imagePath) {
+  return GestureDetector(
+    onTap: () {
+      if (title == "Parking Rules") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ParkingRulesPage()),
+        );
+      } else if (title == "Special Event Parking") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EventParkingPage()),
+        );
+      } else if (title == "Find Parking") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const FindParkingPage()),
+        );
+      }
+    },
+    child: Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Image.asset(imagePath, width: 40, height: 40), // Use imagePath here
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  subtitle,
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                ),
+              ],
+            ),
+          ),
+          Icon(Icons.arrow_forward, color: Colors.grey[600]),
+        ],
+      ),
+    ),
+  );
+}
 }
 
 // Pages for each card and navigation item
@@ -327,7 +343,7 @@ class _EventParkingPageState extends State<EventParkingPage> {
     );
   }
 }
-/*
+
 class FindParkingPage extends StatelessWidget {
   const FindParkingPage({super.key});
 
@@ -349,13 +365,13 @@ class FindParkingPage extends StatelessWidget {
             SizedBox(height: 16.0),
             ParkingLocationCard(
               location: 'Lot A - North Russell St',
-              availability: 'Available',
+              availability: 'Available: 15/30 Spots Available',
               latitude: 40.428492434603484,
               longitude: -86.91883460225058,
             ),
             ParkingLocationCard(
               location: 'Lot B - Discovery',
-              availability: 'According to Analytics - Peak Hours',
+              availability: 'Peak Hours: Only 10/60 spots available',
               latitude: 40.419446279810856,  
               longitude: -86.92328961131224,
             ),
@@ -390,7 +406,7 @@ class ParkingLocationCard extends StatelessWidget {
         ),
         subtitle: Text(
           availability,
-          style: TextStyle(color: availability == 'Available' ? Colors.green : Colors.red),
+          style: TextStyle(color: availability == 'Available: 15/30 Spots Available' ? Colors.green : Colors.red),
         ),
         trailing: const Icon(Icons.directions, color: Colors.blue),
         onTap: () async {
@@ -417,8 +433,8 @@ class ParkingLocationCard extends StatelessWidget {
     );
   }
 }
-*/
-class FindParkingPage extends StatelessWidget {
+
+/*class FindParkingPage extends StatelessWidget {
   const FindParkingPage({super.key});
 
   @override
@@ -502,7 +518,7 @@ class ParkingLocationCard extends StatelessWidget {
   }
 }
 
-
+*/
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
 
