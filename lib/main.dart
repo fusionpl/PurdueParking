@@ -327,7 +327,7 @@ class _EventParkingPageState extends State<EventParkingPage> {
     );
   }
 }
-
+/*
 class FindParkingPage extends StatelessWidget {
   const FindParkingPage({super.key});
 
@@ -356,6 +356,96 @@ class FindParkingPage extends StatelessWidget {
             ParkingLocationCard(
               location: 'Lot B - Discovery',
               availability: 'According to Analytics - Peak Hours',
+              latitude: 40.419446279810856,  
+              longitude: -86.92328961131224,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class ParkingLocationCard extends StatelessWidget {
+  final String location;
+  final String availability;
+  final double latitude;
+  final double longitude;
+
+  const ParkingLocationCard({
+    super.key,
+    required this.location,
+    required this.availability,
+    required this.latitude,
+    required this.longitude,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ListTile(
+        title: Text(
+          location,
+          style: const TextStyle(fontSize: 20.0),
+        ),
+        subtitle: Text(
+          availability,
+          style: TextStyle(color: availability == 'Available' ? Colors.green : Colors.red),
+        ),
+        trailing: const Icon(Icons.directions, color: Colors.blue),
+        onTap: () async {
+          try {
+            final availableMaps = await MapLauncher.installedMaps;
+            if (availableMaps.isNotEmpty) {
+              await availableMaps.first.showMarker(
+                coords: Coords(latitude, longitude),
+                title: location,
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("No map apps installed")),
+              );
+            }
+          } catch (e) {
+            print(e);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Could not open the map")),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+*/
+class FindParkingPage extends StatelessWidget {
+  const FindParkingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Find Parking'),
+      ),
+      body: const SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Available Parking Locations:',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16.0),
+            ParkingLocationCard(
+              location: 'Lot A - North Russell St',
+              availability: '15/30 Spots Available',
+              latitude: 40.428492434603484,
+              longitude: -86.91883460225058,
+            ),
+            ParkingLocationCard(
+              location: 'Lot B - Discovery',
+              availability: 'Only 10/60 Spots available',
               latitude: 40.419446279810856,
               longitude: -86.92328961131224,
             ),
@@ -411,6 +501,7 @@ class ParkingLocationCard extends StatelessWidget {
     );
   }
 }
+
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
