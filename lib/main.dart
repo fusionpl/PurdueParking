@@ -240,14 +240,43 @@ class ParkingRulesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rules = [
+      "Faculty, staff and students must be registered for a parking permit when parking on campus and park so the license plate faces the drive lane.",
+      "Visitors may park in the Grant Street Parking Garage or Harrison Street Parking Garage (hourly fees apply) or in metered parking spaces without a parking permit.",
+      "Daily visitor permits may be obtained from the online parking portal for a rate of 5.00 per day",
+      "Monday through Friday, 7 a.m. to 5 p.m., license plates of each vehicle parked on the West Lafayette campus are required to be linked to a valid Purdue parking permit unless posted otherwise. Some parking spaces are enforced 24/7.",
+      
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Parking Rules"),
       ),
-      body: const Center(
-        child: Text(
-          "Parking Rules",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: rules.length,
+          itemBuilder: (context, index) {
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  child: Text(
+                    (index + 1).toString(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                title: Text(
+                  rules[index],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -269,24 +298,43 @@ class _EventParkingPageState extends State<EventParkingPage> {
   // Predefined events map with a "Football Game" event on November 30
   final Map<DateTime, List<Event>> _events = {
     DateTime.utc(2024, 11, 10): [Event("Volleyball Game"), Event("Women's Basketball Game")],
-    DateTime.utc(2024, 11, 31): [Event("Men's Basketball Game")], // Added event
-    DateTime.utc(2024, 11, 15): [Event("Move your cars - Home Football Game Tomorrow")],
+    DateTime.utc(2024, 11, 11): [Event("Men's Basketball Game")], // Added event
+    DateTime.utc(2024, 11, 22): [Event("Men's Basketball Game - vehicles towed if they're in A, AA, C, F, G, H (upper & lower), J*, K, M, N, P, Q, R, U, Y, Z")],
   };
 
   List<Event> _getEventsForDay(DateTime day) {
     return _events[day] ?? [];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Special Event Parking"),
-      ),
-      backgroundColor: const Color.fromRGBO(207,185,145,1.000),
-      body: Column(
-        children: [
-          TableCalendar(
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text("Special Event Parking"),
+    ),
+    backgroundColor: const Color(0xFFB39424), // Golden page background
+    body: Column(
+      children: [
+        // Calendar Section
+        Container(
+          margin: const EdgeInsets.all(16.0), // Add spacing around the calendar
+          padding: const EdgeInsets.all(12.0), // Add padding inside the container
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFFf7f7f7), Color(0xFFe6e6e6)], // Subtle gradient background
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(12.0), // Rounded corners
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1), // Soft shadow
+                blurRadius: 10.0,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: TableCalendar(
             firstDay: DateTime.utc(2020, 1, 1),
             lastDay: DateTime.utc(2030, 12, 31),
             focusedDay: _focusedDay,
@@ -309,39 +357,81 @@ class _EventParkingPageState extends State<EventParkingPage> {
               _focusedDay = focusedDay;
             },
             eventLoader: _getEventsForDay,
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
               todayDecoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary, // Gold for today's date
+                color: Color(0xFFD4AF37), // Gold for today's date
                 shape: BoxShape.circle,
               ),
               selectedDecoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary, // Black for selected date
+                color: Colors.black, // Black for selected date
                 shape: BoxShape.circle,
               ),
+              weekendTextStyle: TextStyle(color: Colors.redAccent), // Red text for weekends
+              defaultTextStyle: TextStyle(fontWeight: FontWeight.bold), // Bold text for all days
               outsideDaysVisible: false,
             ),
           ),
-          const SizedBox(height: 20),
-          // Display events for the selected day
-          Expanded(
-            child: _buildEventList(),
+        ),
+        const SizedBox(height: 16.0),
+        // Selected Day Events Section
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.all(12.0),
+            decoration: BoxDecoration(
+              color: Colors.white, // Clean white background for the event list
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10.0,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: _buildEventList(), // Use the existing event list builder
           ),
-        ],
+        ),
+      ],
+    ),
+  );
+}
+
+
+
+ Widget _buildEventList() {
+  final events = _getEventsForDay(_selectedDay ?? _focusedDay);
+  
+  if (events.isEmpty) {
+    return Center(
+      child: Text(
+        "Special events/rules will be displayed here",
+        style: TextStyle(
+          fontSize: 16.0,
+          fontStyle: FontStyle.italic,
+          color: Colors.grey[700], // Subtle grey text
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }
 
-  Widget _buildEventList() {
-    final events = _getEventsForDay(_selectedDay ?? _focusedDay);
-    return ListView.builder(
-      itemCount: events.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(events[index].title),
-        );
-      },
-    );
-  }
+  return ListView.builder(
+    itemCount: events.length,
+    itemBuilder: (context, index) {
+      return ListTile(
+        title: Text(
+          events[index].title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        leading: Icon(
+          Icons.event, // Event icon
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      );
+    },
+  );
+}
 }
 
 class FindParkingPage extends StatelessWidget {
