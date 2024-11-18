@@ -597,7 +597,7 @@ class ParkingLocationCard extends StatelessWidget {
         ),
         subtitle: Text(
           availability,
-          style: TextStyle(color: availability == 'Available' ? Colors.green : Colors.red),
+          style: TextStyle(color: availability == '15/30 Spots Available' ? Colors.green : Colors.red),
         ),
         trailing: const Icon(Icons.directions, color: Colors.blue),
         onTap: () {
